@@ -10,6 +10,7 @@ from app.rest_api import schemas,api
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+#add API router
 app.include_router(api.router_layers)
 
 '''
