@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from app import models, schemas
+from app.db import models
+from app.rest_api import schemas
 
 def create_architecture_layer(db: Session, layer: schemas.ArchitectureLayerCreate):
     db_layer = models.ArchitectureLayer(**layer.dict())
