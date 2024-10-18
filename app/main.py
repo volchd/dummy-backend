@@ -1,10 +1,9 @@
-from typing import List
-from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy.orm import Session
-from app.db import crud
-from app.db.database import engine, Base, get_db
-from app.db import models
-from app.rest_api import schemas,api
+
+from fastapi import FastAPI
+
+from .db.database import engine, Base
+
+from .rest_api import api
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
