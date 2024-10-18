@@ -3,6 +3,9 @@ from sqlalchemy.orm import Session
 from app.db import models
 from app.rest_api import schemas
 
+NOT_FOUND_DETAIL = "object not found"
+
+
 def create_architecture_layer(db: Session, layer: schemas.ArchitectureLayerCreate):
     db_layer = models.ArchitectureLayer(**layer.dict())
     db.add(db_layer)
@@ -14,7 +17,11 @@ def get_architecture_layers(db: Session, skip: int = 0, limit: int = 10):
     return db.query(models.ArchitectureLayer).offset(skip).limit(limit).all()
 #get single architecture layer
 def get_architecture_layer(db: Session, layer_id: int):
-    return db.query(models.ArchitectureLayer).filter(models.ArchitectureLayer.id == layer_id).first()
+    layer = db.query(models.ArchitectureLayer).filter(models.ArchitectureLayer.id == layer_id).first()
+        # If the layer doesn't exist, return a 404 error
+    if layer is None:
+        raise HTTPException(status_code=404, detail=NOT_FOUND_DETAIL)
+    return layer
 
 #update architecture layer 
 def update_architecture_layer(db: Session, layer_id: int, layer_update: schemas.ArchitectureLayerCreate):
@@ -22,7 +29,7 @@ def update_architecture_layer(db: Session, layer_id: int, layer_update: schemas.
     
     # If the layer doesn't exist, return a 404 error
     if layer is None:
-        raise HTTPException(status_code=404, detail="ArchitectureLayer not found")
+        raise HTTPException(status_code=404, detail=NOT_FOUND_DETAIL)
     
     # Update the fields if new values are provided
     if layer_update.name is not None:
@@ -42,7 +49,7 @@ def delete_architecture_layer(db: Session, layer_id: int):
     
     # If the layer does not exist, raise a 404 error
     if layer is None:
-        raise HTTPException(status_code=404, detail="ArchitectureLayer not found")
+        raise HTTPException(status_code=404, detail=NOT_FOUND_DETAIL)
     
     # Delete the ArchitectureLayer from the database
     db.delete(layer)

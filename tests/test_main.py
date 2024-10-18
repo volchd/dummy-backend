@@ -36,12 +36,18 @@ def test_get_layer():
     response = client.get("/layers/1")
     assert response.status_code == 200
     assert response.json()["name"] == "Layer 1"
+    
+    response = client.get("/layers/10")
+    assert response.status_code == 404
 
 def test_update_layer():
     response = client.put("/layers/1", json={"name": "Layer 1 updated", "description": "updated Layer"})
     assert response.status_code == 200
     assert response.json()["name"] == "Layer 1 updated"
     assert response.json()["description"] == "updated Layer"
+
+    response = client.put("/layers/10", json={"name": "Layer 1 updated", "description": "updated Layer"})
+    assert response.status_code == 404
 
 def test_get_all_layer():
     client.post("/layers/", json={"name": "Layer 2", "description": "Second Layer"})
@@ -55,6 +61,9 @@ def test_delete_layer():
     assert response.status_code == 204
     response = client.delete("/layers/2")
     assert response.status_code == 204
+
+    response = client.delete("/layers/2")
+    assert response.status_code == 404
 
 
 ''' 
