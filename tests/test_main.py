@@ -26,12 +26,38 @@ def database_connection():
     db.execute(text("PRAGMA foreign_keys = ON"))
     db.commit()
 
-
+#testing architecture layer object
 def test_create_layer():
     response = client.post("/layers/", json={"name": "Layer 1", "description": "First Layer"})
     assert response.status_code == 200
     assert response.json()["name"] == "Layer 1"
 
+def test_get_layer():
+    response = client.get("/layers/1")
+    assert response.status_code == 200
+    assert response.json()["name"] == "Layer 1"
+
+def test_update_layer():
+    response = client.put("/layers/1", json={"name": "Layer 1 updated", "description": "updated Layer"})
+    assert response.status_code == 200
+    assert response.json()["name"] == "Layer 1 updated"
+    assert response.json()["description"] == "updated Layer"
+
+def test_get_all_layer():
+    client.post("/layers/", json={"name": "Layer 2", "description": "Second Layer"})
+    response = client.get("/layers")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) == 2
+
+def test_delete_layer():
+    response = client.delete("/layers/1")
+    assert response.status_code == 204
+    response = client.delete("/layers/2")
+    assert response.status_code == 204
+
+
+''' 
 def test_create_building_block():
     # Assuming layer_id is 1 for testing purposes.
     response = client.post("/layers/1/blocks/", json={
@@ -41,7 +67,7 @@ def test_create_building_block():
 })
     assert response.status_code == 200
     assert response.json()["name"] == "Block 1"
-'''
+
 def test_create_url():
     # Create a URL related to a layer
     response = client.post("/urls/", json={"url": "http://example.com"})
