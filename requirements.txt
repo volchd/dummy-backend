@@ -1,0 +1,11 @@
+# requirements.txt
+
+fastapi
+sqlalchemy
+pydantic
+uvicorn
+psycopg2
+alembic
+pytest
+httpx
+
