@@ -24,7 +24,7 @@ class ArchitectureBuildingBlock(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
-    description = Column(String, unique=True, index=True)
+    description = Column(String, unique=False, index=True)
     status = Column(Enum(StatusEnum), default=StatusEnum.NA)
     
     layer_id = Column(Integer, ForeignKey("architecture_layers.id"))
