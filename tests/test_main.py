@@ -64,12 +64,13 @@ def test_delete_layer():
 
     response = client.delete("/layers/2")
     assert response.status_code == 404
+#-----------------------------------------
 
-
-''' 
+#testing building block object
 def test_create_building_block():
-    # Assuming layer_id is 1 for testing purposes.
-    response = client.post("/layers/1/blocks/", json={
+    response = client.post("/layers/", json={"name": "Layer 1", "description": "First Layer"})
+    layer_id=response.json()["id"]
+    response = client.post(f"/layers/{layer_id}/blocks/", json={
   "name": "Block 1",
   "description": "Block 1 description",
   "status": "NA"
@@ -77,6 +78,66 @@ def test_create_building_block():
     assert response.status_code == 200
     assert response.json()["name"] == "Block 1"
 
+def test_get_building_block():
+    response = client.get("/layers/1/blocks/1")
+    assert response.status_code == 200
+    assert response.json()["name"] == "Block 1"
+    
+    response = client.get("/layers/1/blocks/10")
+    assert response.status_code == 404
+
+
+def test_update_building_block():
+    response = client.put("/layers/1/blocks/1", json={
+  "name": "updated",
+  "description": "updated",
+  "status": "Defined"
+})
+    assert response.status_code == 200
+    assert response.json()["name"] == "updated"
+    assert response.json()["description"] == "updated"
+    assert response.json()["status"] == "Defined"
+
+    response = client.put("/layers/1/blocks/10", json={
+  "name": "updated",
+  "description": "updated",
+  "status": "Defined"
+})
+    assert response.status_code == 404
+
+
+
+def test_get_all_building_blocks():
+    response = client.post("/layers/", json={"name": "all Layer 1", "description": "First Layer"})
+    layer_id=response.json()["id"]
+    client.post(f"/layers/{layer_id}/blocks/", json={
+  "name": "all Block 1",
+  "description": "all Block 1 description",
+  "status": "NA"
+})
+    client.post(f"/layers/{layer_id}/blocks/", json={
+  "name": "all Block 2",
+  "description": "all Block 2 description",
+  "status": "NA"
+})
+    response=client.get(f"/layers/{layer_id}/blocks/")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) == 2
+    response=client.get("/layers/100/blocks/")
+    assert response.status_code == 404
+
+
+
+def test_delete_building_block():
+    response=client.delete("/layers/100/blocks/1")
+    assert response.status_code == 404
+    response=client.delete("/layers/1/blocks/100")
+    assert response.status_code == 404
+    response=client.delete("/layers/1/blocks/1")
+    assert response.status_code == 204
+#---------------------------------------------------
+''' 
 def test_create_url():
     # Create a URL related to a layer
     response = client.post("/urls/", json={"url": "http://example.com"})

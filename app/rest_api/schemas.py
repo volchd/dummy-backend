@@ -30,6 +30,7 @@ class ArchitectureBuildingBlockCreate(ArchitectureBuildingBlockBase):
 
 class ArchitectureBuildingBlock(ArchitectureBuildingBlockBase):
     id: int
+    layer_id: int
     urls: List[URL] = []
 
     class Config:
