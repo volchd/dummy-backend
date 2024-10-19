@@ -1,16 +1,16 @@
 from typing import List
 from fastapi import APIRouter, Depends,status
 from sqlalchemy.orm import Session
-from app.db import models
 from app.rest_api import schemas
 from app.db import crud
-from app.db.database import engine, Base, get_db
+from app.db.database import get_db
 
 
 router_layers = APIRouter(
     prefix='/layers',
     tags=['Architecture Layers']
 )
+
 #create architecture layer
 @router_layers.post("/", response_model=schemas.ArchitectureLayer)
 def create_architecture_layer(layer: schemas.ArchitectureLayerCreate, db: Session = Depends(get_db)):
@@ -23,12 +23,12 @@ def read_architecture_layers(skip: int = 0, limit: int = 10, db: Session = Depen
 
 #get architecture layer
 @router_layers.get("/{layer_id}", response_model=schemas.ArchitectureLayer)
-def read_architecture_layers(layer_id: int, db: Session = Depends(get_db)):
+def read_architecture_layer(layer_id: int, db: Session = Depends(get_db)):
     return crud.get_architecture_layer(db=db, layer_id=layer_id)
 
 #update architecture layer
 @router_layers.put("/{layer_id}", response_model=schemas.ArchitectureLayer)
-def read_architecture_layers(layer_update: schemas.ArchitectureLayerCreate,layer_id: int, db: Session = Depends(get_db)):
+def update_architecture_layers(layer_update: schemas.ArchitectureLayerCreate,layer_id: int, db: Session = Depends(get_db)):
     return crud.update_architecture_layer(db=db,layer_update=layer_update, layer_id=layer_id)
 
 #delete architecture layer
@@ -45,23 +45,23 @@ def create_architecture_building_block(layer_id: int, block: schemas.Architectur
 
 #get architecture building block
 @router_layers.get("/{layer_id}/blocks/{block_id}", response_model=schemas.ArchitectureBuildingBlock)
-def get_architecture_building_block(layer_id:int ,block_id: int, db: Session = Depends(get_db)):
+def get_architecture_building_block(block_id: int, db: Session = Depends(get_db)):
     return crud.get_architecture_building_block(db=db,block_id=block_id)
 
 
 # update architectute building block
 @router_layers.put("/{layer_id}/blocks/{block_id}", response_model=schemas.ArchitectureBuildingBlock)
-def create_architecture_building_block(layer_id: int,block_id: int, block: schemas.ArchitectureBuildingBlockCreate, db: Session = Depends(get_db)):
+def update_architecture_building_block(block_id: int, block: schemas.ArchitectureBuildingBlockCreate, db: Session = Depends(get_db))->schemas.ArchitectureBuildingBlock:
     return crud.update_architecture_building_block(db=db, block=block, block_id=block_id)
 
 #get all architecture building blocks for a architecture layer
 @router_layers.get("/{layer_id}/blocks/", response_model=List[schemas.ArchitectureBuildingBlock])
-def get_architecture_building_block(layer_id:int , db: Session = Depends(get_db)):
+def get_architecture_building_blocks(layer_id:int , db: Session = Depends(get_db))-> List[schemas.ArchitectureBuildingBlock]:
     return crud.get_all_architecture_building_block(db=db,layer_id=layer_id)
 
 # update architectute building block
 @router_layers.delete("/{layer_id}/blocks/{block_id}",  status_code=status.HTTP_204_NO_CONTENT)
-def create_architecture_building_block(layer_id: int,block_id: int, db: Session = Depends(get_db)):
+def delete_architecture_building_block(layer_id: int,block_id: int, db: Session = Depends(get_db))->None:
     return crud.delete_architecture_building_block(db=db, layer_id=layer_id, block_id=block_id)
 
 

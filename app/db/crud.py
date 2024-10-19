@@ -24,10 +24,9 @@ def get_architecture_layer(db: Session, layer_id: int):
         raise HTTPException(status_code=404, detail=NOT_FOUND_DETAIL)
     return layer
 
-#update architecture layer 
+#update architecture layer
 def update_architecture_layer(db: Session, layer_id: int, layer_update: schemas.ArchitectureLayerCreate):
-    layer = db.query(models.ArchitectureLayer).filter(models.ArchitectureLayer.id == layer_id).first()
-    
+    layer = db.query(models.ArchitectureLayer).filter(models.ArchitectureLayer.id == layer_id).first()    
     # If the layer doesn't exist, return a 404 error
     if layer is None:
         raise HTTPException(status_code=404, detail=NOT_FOUND_DETAIL)
@@ -85,11 +84,11 @@ def update_architecture_building_block(db: Session, block: schemas.ArchitectureB
     
     # Update the fields if new values are provided
     if db_block.name is not None:
-            db_block.name = block.name
+        db_block.name = block.name
     if db_block.description is not None:
-            db_block.description = block.description
+        db_block.description = block.description
     if db_block.status is not None:
-            db_block.status = block.status
+        db_block.status = block.status
     # Commit the changes to the database
     db.commit()
     db.refresh(db_block)

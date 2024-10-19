@@ -1,6 +1,6 @@
-from pydantic import BaseModel
-from typing import List, Optional
+from typing import List
 from enum import Enum
+from pydantic import BaseModel
 
 class StatusEnum(str, Enum):
     NA = "NA"
