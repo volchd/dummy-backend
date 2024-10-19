@@ -1,9 +1,10 @@
 name: CI
 
 on:
-  push:
-    tags:
-      - pylint-pass-*
+  workflow_run:
+    workflows: ["Pylint"]  # Name of the Pylint workflow (as defined in the `name` field of `pylint.yml`)
+    types:
+      - completed
 
 jobs:
   build:
