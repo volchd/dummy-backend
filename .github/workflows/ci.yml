@@ -2,7 +2,7 @@ name: CI
 
 on:
   workflow_run:
-    workflows: ["Pylint"]  # Name of the Pylint workflow (as defined in the `name` field of `pylint.yml`)
+    workflows: ["Pylint"]
     types:
       - completed
 
@@ -35,3 +35,4 @@ jobs:
     - name: Run tests
       run: |
         pytest
+        pytest --cov=app tests/test_main.py
