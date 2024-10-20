@@ -97,8 +97,6 @@ def update_architecture_building_block(db: Session, block: schemas.ArchitectureB
 # get all architecture building blocks for an architecture layer
 def get_all_architecture_building_block(db: Session,layer_id: int):
     layer =get_architecture_layer(db=db,layer_id=layer_id)
-    if layer is None:
-        raise HTTPException(status_code=404, detail=NOT_FOUND_DETAIL)
     return  db.query(models.ArchitectureBuildingBlock).filter(models.ArchitectureBuildingBlock.layer_id==layer_id).all()
 
 #delete architecture lbuilding block
